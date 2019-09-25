@@ -18,13 +18,13 @@ def get_column(matrix: List[List[int]], c: int):
     return list(map(lambda x: x[c], matrix))
 
 
-def check(film, ww, kk):
-    a = re.compile('0{%d,}' % kk)
-    b = re.compile('1{%d,}' % kk)
-    for w in range(ww):
+def check(film, a_regex, b_regex):
+    for w in range(len(film[0])):
         col = ''.join(map(str, get_column(film, w)))
-        a_continue = a.findall(col)
-        b_continue = b.findall(col)
+        a_continue = a_regex.search(col)
+        b_continue = b_regex.search(col)
+        # a_continue = a_regex.findall(col)
+        # b_continue = b_regex.findall(col)
         if a_continue or b_continue:
             pass
         else:
@@ -33,12 +33,27 @@ def check(film, ww, kk):
 
 
 def row_changes(matrix: List[List[int]], row_id: Tuple, value: Tuple):
-    temp = deepcopy(matrix)         # Do not touch original data
     if len(row_id) != len(value):
         raise ValueError("len(row_id) %d  not equal len(value) %d" % (len(row_id), len(value)))
 
+    temp = deepcopy(matrix)         # Do not touch original data
     for r, v in zip(row_id, value):
         temp[r] = [v for _ in temp[r]]
+    return temp
+
+
+def row_changes2(matrix: List[List[int]], row_id: Tuple, value: Tuple):
+    if len(row_id) != len(value):
+        raise ValueError("len(row_id) %d  not equal len(value) %d" % (len(row_id), len(value)))
+    w = len(matrix[0])
+    temp = []
+    c = 0
+    for r in range(len(matrix)):
+        if c >= len(row_id) or r != row_id[c]:
+            temp.append(matrix[r])
+        else:
+            temp.append([value[c] for _ in range(w)])
+            c += 1
     return temp
 
 
@@ -50,8 +65,11 @@ def print_film(film):
 
 
 def solution(film, dd, ww, kk):
+    a_regex = re.compile('0{%d,}' % kk)
+    b_regex = re.compile('1{%d,}' % kk)
+
     cnt = 0
-    if check(film, ww, kk):
+    if check(film, a_regex, b_regex):
         return cnt
 
     while True:
@@ -69,12 +87,14 @@ def solution(film, dd, ww, kk):
                 # tt = row_changes(film, f, m)
                 # print(f, m)
                 # print_film(tt)
-                # if check(row_changes(film, f, m), ww, kk):
-                if check(row_changes(film, f, m), ww, kk):
+                if check(row_changes2(film, f, m), a_regex, b_regex):
                     return cnt
 
 
 def main():
+    import time
+    s = time.time()
+
     test_cases = int(input().rstrip())
     for t in range(test_cases):
         dd, ww, kk = list(map(int, input().rstrip().split(' ')))
@@ -83,6 +103,8 @@ def main():
         # print_film(film)
         print('#%d %d' % (t+1, solution(film, dd, ww, kk)))
         # print('=================================================')
+
+    print(time.time() - s)
 
 
 if __name__ == '__main__':

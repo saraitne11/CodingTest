@@ -56,6 +56,25 @@ def search(mtx, x, y):
     return visit
 
 
+def search_recursive(mtx, start_x, start_y):
+    n = len(mtx)    # n by n 행렬
+    visit = []
+
+    def chain(x, y):
+        # 현재 노드 방문하고 삭제
+        mtx[x][y] = 0
+        visit.append((x, y))
+        for k in range(4):      # 상하좌우 탐색
+            nx = x + dx[k]
+            ny = y + dy[k]
+            if is_in_matrix(nx, ny, n, n):
+                if mtx[nx][ny] == 1:
+                    chain(nx, ny)
+
+    chain(start_x, start_y)
+    return visit
+
+
 def divisions_print(n, divisions):
     mtx = zeros_list(n, n)
     ds = sorted(divisions, key=len)
@@ -76,7 +95,8 @@ def main():
     for i in range(n):
         for j in range(n):
             if mtx[i][j] == 1:
-                v = search(mtx, i, j)
+                # v = search(mtx, i, j)
+                v = search_recursive(mtx, i, j)
                 divisions.append(v)
                 # print(v)
                 # pprint(mtx)
