@@ -1,5 +1,6 @@
 """
 Counting Elements
+
 You are given N counters, initially set to 0, and you have two possible operations on them:
 
 increase(X) − counter X is increased by 1,
