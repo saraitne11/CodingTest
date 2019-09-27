@@ -2,10 +2,7 @@
 https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5V1SYKAaUDFAWu
 보호필름
 """
-import re
-from pprint import pprint
-from typing import List, Tuple, Iterable
-from copy import deepcopy
+# from pprint import pprint
 from itertools import combinations, product
 
 
@@ -13,36 +10,31 @@ MEDICINE = [0, 1]   # [A, B]
 CELL = ['A', 'B']
 
 
-def get_column(matrix: List[List[int]], c: int):
+def get_column(matrix, c):
     # x에 한 행 씩 들어가고 각 행의 column c 의 값을 가져와서 리스트로
     return list(map(lambda x: x[c], matrix))
 
 
-def check(film, a_regex, b_regex):
-    for w in range(len(film[0])):
-        col = ''.join(map(str, get_column(film, w)))
-        a_continue = a_regex.search(col)
-        b_continue = b_regex.search(col)
-        # a_continue = a_regex.findall(col)
-        # b_continue = b_regex.findall(col)
-        if a_continue or b_continue:
-            pass
+def column_check(column, k):
+    cnt = 1
+    for j in range(1, len(column)):
+        if column[j] == column[j-1]:
+            cnt += 1
         else:
+            cnt = 1
+        if cnt >= k:
+            return True
+    return False
+
+
+def check(film, k):
+    for w in range(len(film[0])):
+        if not column_check(get_column(film, w), k):
             return False
     return True
 
 
-def row_changes(matrix: List[List[int]], row_id: Tuple, value: Tuple):
-    if len(row_id) != len(value):
-        raise ValueError("len(row_id) %d  not equal len(value) %d" % (len(row_id), len(value)))
-
-    temp = deepcopy(matrix)         # Do not touch original data
-    for r, v in zip(row_id, value):
-        temp[r] = [v for _ in temp[r]]
-    return temp
-
-
-def row_changes2(matrix: List[List[int]], row_id: Tuple, value: Tuple):
+def row_changes(matrix, row_id, value):
     if len(row_id) != len(value):
         raise ValueError("len(row_id) %d  not equal len(value) %d" % (len(row_id), len(value)))
     w = len(matrix[0])
@@ -64,12 +56,10 @@ def print_film(film):
         print()
 
 
-def solution(film, dd, ww, kk):
-    a_regex = re.compile('0{%d,}' % kk)
-    b_regex = re.compile('1{%d,}' % kk)
+def solution(film, dd, kk):
 
     cnt = 0
-    if check(film, a_regex, b_regex):
+    if check(film, kk):
         return cnt
 
     while True:
@@ -87,7 +77,7 @@ def solution(film, dd, ww, kk):
                 # tt = row_changes(film, f, m)
                 # print(f, m)
                 # print_film(tt)
-                if check(row_changes2(film, f, m), a_regex, b_regex):
+                if check(row_changes(film, f, m), kk):
                     return cnt
 
 
@@ -101,7 +91,7 @@ def main():
         film = [list(map(int, input().rstrip().split())) for _ in range(dd)]
         # print('D=%d, W=%d, K=%d' % (dd, ww, kk))
         # print_film(film)
-        print('#%d %d' % (t+1, solution(film, dd, ww, kk)))
+        print('#%d %d' % (t+1, solution(film, dd, kk)))
         # print('=================================================')
 
     print(time.time() - s)

@@ -1,6 +1,7 @@
 from itertools import combinations, product
 from pprint import pprint
 
+
 def combination(arr, r):
     # 1.
     arr = sorted(arr)
