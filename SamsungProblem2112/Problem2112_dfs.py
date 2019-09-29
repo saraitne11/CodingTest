@@ -109,6 +109,9 @@ def solution(film, k):
 
 
 def main():
+    import time
+    s = time.time()
+
     test_cases = int(input().rstrip())
     for t in range(test_cases):
         dd, ww, kk = list(map(int, input().rstrip().split(' ')))
@@ -116,6 +119,8 @@ def main():
         # print('D=%d, W=%d, K=%d' % (dd, ww, kk))
         print('#%d %d' % (t+1, solution(film, kk)))
         # print('=================================================')
+
+    print(time.time() - s)
 
 
 if __name__ == '__main__':

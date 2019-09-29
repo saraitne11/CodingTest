@@ -121,10 +121,10 @@ def dfs_recursive(graph: Dict, start_node: str, visited=None):
 def dfs_path(graph: Dict, start: str, end: str):
     paths = []
     # cnt = 0, cnt는 search 함수 안에서 인식 못함... 왜??
-    # cnt = [0]
+    cnt = [0]
 
     def search(current, visited):
-        # cnt[0] += 1
+        cnt[0] += 1
         # search() 재귀호출 마다 새로운 visited의 copy를 만들어 줘야함
         visited = visited + [current]
 
@@ -141,7 +141,34 @@ def dfs_path(graph: Dict, start: str, end: str):
         return
 
     search(start, [])
-    # print(cnt[0])
+    print(cnt[0])
+    return paths
+
+
+def dfs_path2(graph: Dict, start: str, end: str):
+    paths = []
+    # cnt = 0, cnt는 search 함수 안에서 인식 못함... 왜??
+    cnt = [0]
+
+    def search(current, visited):
+        cnt[0] += 1
+
+        if current == end:
+            paths.append(visited)
+            # 여기서 return을 안해주면 도착 node가 끝단이 아닌 경우,
+            # 추가적으로 search를 재귀 호출함.
+            return
+
+        for node in graph[current]:
+            if node not in visited:
+                # search() 재귀호출 마다 새로운 visited의 copy를 만들어 줘야함
+                visited = visited + [node]
+                # print(node, visited)
+                search(node, visited)
+        return
+
+    search(start, [start])
+    print(cnt[0])
     return paths
 
 
@@ -186,6 +213,7 @@ def main():
     print('dfs_recursive', dfs_recursive(adj_list, 'A'))
 
     print('dfs_search_path A->L', dfs_path(adj_list, 'A', 'C'))
+    print('dfs_search_path A->L', dfs_path2(adj_list, 'A', 'C'))
 
 
 if __name__ == '__main__':

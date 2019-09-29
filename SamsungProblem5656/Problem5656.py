@@ -117,7 +117,7 @@ def search(matrix, num_shot):
         r = count_bricks(mtx)       # number of current bricks
         if r == 0 or n == 0:
             remainders.append(r)
-            return
+            return r
         else:
             for s in get_surface(mtx):
                 if s[0] != -1:
@@ -125,7 +125,9 @@ def search(matrix, num_shot):
 
     for surface in get_surface(matrix):
         if surface[0] != -1:
-            simulation(matrix, surface, num_shot)
+            n_remain = simulation(matrix, surface, num_shot)
+            if n_remain == 0:
+                return 0
 
     return min(remainders)
 

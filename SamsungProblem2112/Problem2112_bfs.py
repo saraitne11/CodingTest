@@ -3,6 +3,7 @@ https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5
 보호필름
 """
 from pprint import pprint
+from collections import deque
 
 
 A = 0
@@ -62,7 +63,8 @@ def solution(film, k):
         return 0
 
     cnt = 1
-    queue = []
+    # queue = []
+    queue = deque([])
     for d in range(depth):
         for v in [A, B]:
             new_film = row_change(film, d, v)
@@ -74,7 +76,8 @@ def solution(film, k):
 
     while queue:
         # print(list(map(lambda x: x[1:], queue)))
-        cur_film, visited, cnt = queue.pop(0)
+        # cur_film, visited, cnt = queue.pop(0)
+        cur_film, visited, cnt = queue.popleft()
         # print(visited, cnt)
         # print_film(cur_film)
         for d in range(depth):
