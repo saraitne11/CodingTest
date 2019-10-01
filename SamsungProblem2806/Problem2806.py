@@ -29,6 +29,7 @@ def solution(n):
             return
 
         next_row = points[-1][0] + 1
+        # candidates = [(next_row, j) for j in range(n) if j not in list(map(lambda x: x[1], points))]
         candidates = [(next_row, j) for j in range(n)]
 
         for candi in candidates:
@@ -48,20 +49,18 @@ def solution(n):
     start_points = [(0, j) for j in range(n)]
     for start in start_points:
         search([start])
-    return ans
+    return len(ans)
 
 
 def main():
-    import time
-    s = time.time()
+    # import time
+    # s = time.time()
 
-    # n = int(input())
-    for n in range(1, 12):
-        ans = solution(n)
-    # print(ans)
-        print(len(ans))
+    test_cases = int(input().rstrip())
+    for t in range(test_cases):
+        print('#%d %d' % (t+1, solution(int(input().rstrip()))))
 
-    print(time.time() - s)
+    # print(time.time() - s)
 
 
 if __name__ == '__main__':
